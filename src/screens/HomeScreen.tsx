@@ -17,6 +17,7 @@ const HomeScreen = ({ navigation }: any) => {
 
     const renderItem = ({ item }: { item: Match }) => (
         <View style={styles.matchItem}>
+            <Text>{item.name}</Text>
             <Text>{item.day} at {item.timeSlot}</Text>
             <View style={styles.matchActions}>
                 <TouchableOpacity

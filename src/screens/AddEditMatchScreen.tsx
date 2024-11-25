@@ -17,7 +17,7 @@ const AddEditMatchScreen = ({ route, navigation }: any) => {
   const [name, setName] = useState(match ? match.name : '');
   const [time, setTime] = useState(match ? match.timeSlot : '');
   const [date, setDate] = useState(match ? match.day : '');
-  const [selectedParticipants, setSelectedParticipants] = useState<string[]>(match ? match.participants : '');
+  const [selectedParticipants, setSelectedParticipants] = useState<string[]>(match ? match.participants : []);
   const [modalVisible, setModalVisible] = useState(false);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -112,7 +112,7 @@ const AddEditMatchScreen = ({ route, navigation }: any) => {
 
       <TouchableOpacity style={{ marginBottom: "auto" }} onPress={() => setModalVisible(true)}>
         <TextInput
-          value={selectedParticipants.join(', ')}
+          value={selectedParticipants?.join(', ')}
           placeholder="Select Participants"
           editable={false}
           style={styles.input}
