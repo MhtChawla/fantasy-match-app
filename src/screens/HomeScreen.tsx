@@ -51,7 +51,7 @@ const HomeScreen = ({ navigation }: any) => {
                 },
                 {
                     text: "OK",
-                    onPress: () => dispatch(deleteMatch(matches.filter((match: Match) => match.id !== id)))
+                    onPress: () => dispatch(deleteMatch(id))
                 }
             ]
         );
