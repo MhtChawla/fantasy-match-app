@@ -2,6 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 export interface Match {
     id: string;
+    name: string;
     day: string;
     timeSlot: string;
     participants: string[];
@@ -12,7 +13,13 @@ interface MatchState {
 }
 
 const initialState: MatchState = {
-    matches: [],
+    matches: [{
+        id: "abc",
+        name: "abc",
+        day: "24 Nov 2024",
+        timeSlot: "2-4 PM",
+        participants: ["jatin", "rohan"]
+    }],
 };
 
 const slice = createSlice({
@@ -20,7 +27,7 @@ const slice = createSlice({
     initialState,
     reducers: {
         addMatch: (state, action: PayloadAction<Match>) => {
-            state.matches.push(action.payload);
+            state?.matches?.push(action.payload);
         },
         updateMatch: (state, action: PayloadAction<Match>) => {
             const index = state.matches.findIndex(match => match.id === action.payload.id);

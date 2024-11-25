@@ -1,15 +1,19 @@
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Alert } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Calendar } from 'react-native-calendars';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@reduxjs/toolkit/query';
-import { Match } from '../redux/slices/matchdata';
+import { Match, deleteMatch } from '../redux/slices/matchdata';
+import { generateDateObjects } from '../utils/helpers';
 
 const HomeScreen = ({ navigation }: any) => {
 
     const dispatch = useDispatch();
-    const matches = useSelector((state: any) => state.matchdata.matches);
+
+    const matches = useSelector((state: any) => {
+        console.log(state);
+        return state.matchdata?.matches;
+    });
 
     const renderItem = ({ item }: { item: Match }) => (
         <View style={styles.matchItem}>
@@ -17,26 +21,48 @@ const HomeScreen = ({ navigation }: any) => {
             <View style={styles.matchActions}>
                 <TouchableOpacity
                     style={styles.actionButton}
-                // onPress={() => handleEditMatch(item)}
+                    onPress={() => handleEditMatch(item)}
                 >
                     <Text>Edit</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.actionButton}
-                // onPress={() => handleDeleteMatch(item.id)}
+                    onPress={() => handleDeleteMatch(item.id)}
                 >
                     <Text>Delete</Text>
                 </TouchableOpacity>
             </View>
         </View>
     );
+
+    const handleEditMatch = (match: Match) => {
+        navigation.navigate('AddEditMatchScreen', { match });
+    };
+
+
+    const handleDeleteMatch = (id: string) => {
+        Alert.alert(
+            "Delete Match",
+            "Are you sure you want to delete this match?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "OK",
+                    onPress: () => dispatch(deleteMatch(matches.filter((match: Match) => match.id !== id)))
+                }
+            ]
+        );
+    };
+
+    const uniqueDays = [...new Set(matches.map((match: Match) => match.day))]
+
     return (
         <SafeAreaView style={styles.container}>
             <Calendar
-                markedDates={{
-                    '2024-11-25': { selected: true, marked: true, selectedColor: 'blue' },
-                    '2024-11-26': { selected: true, marked: true, selectedColor: 'blue' },
-                }}
+                markedDates={uniqueDays.length ? generateDateObjects(uniqueDays as string[]) : {}}
                 // onDayPress={handleDayPress}
                 monthFormat={'yyyy MM'}
             />
